@@ -7,3 +7,5 @@ Different ideas for real programming
 02 Safe-Fail Default: Done in Python 
 03 Error-Handling: Done in Python
 04 Assertions + Systems programming examples: Done in Python
+05 Principle Of Least Privelege. Need more examples and in-depth treatise
+06 Immutable Data
