@@ -1,0 +1,195 @@
+Steps to set up SonarQube analysis for your Python project.
+To install SonarQube using Docker, 
+which is a free and easy way to get started, you can follow these steps. 
+This guide assumes you have Docker installed and running on your machine. 
+If you don't have Docker, you'll need to install it first from the official Docker website.
+
+Step 1: Pull the SonarQube Docker Image
+First, pull the latest SonarQube image from the Docker Hub. 
+Open your terminal and run:
+
+docker pull sonarqube
+
+This command downloads the SonarQube Docker image to your machine.
+Step 2: Run SonarQube Container
+Next, start a SonarQube container using the Docker image. 
+The SonarQube server runs on port 9000 by default, so you'll need to 
+map this port to a port on your host machine. Run the following command:
+
+docker run -d --name sonarqube -p 9000:9000 sonarqube
+
+This command does the following:
+
+-d runs the container in detached mode (in the background).
+--name sonarqube gives the container a name (sonarqube).
+-p 9000:9000 maps port 9000 on the host to port 9000 in the container, 
+allowing you to access the SonarQube server via your local machine.
+sonarqube specifies the image to use.
+
+Step 3: Access SonarQube
+Once the container is running, open a web browser and 
+navigate to http://localhost:9000. 
+You should see the SonarQube web interface. 
+The default credentials are:
+
+Username: admin
+Password: admin
+You'll be prompted to change the default password after your first login.
+
+Step 4: Prepare Your Project for Analysis
+prepare your Python project 
+with a sonar-project.properties file at the root, and ensure your code is ready for analysis.
+
+Step 5: Install and Run SonarScanner
+For scanning your project, you'll need to install SonarScanner or use the 
+SonarScanner Docker image. 
+If opting for Docker, ensure your project directory is accessible to 
+the Docker container. 
+Here's how to run SonarScanner using Docker, 
+assuming your project is in /path/to/your/project:
+
+
+docker run --rm -e SONAR_HOST_URL="http://localhost:9000" -e SONAR_LOGIN="<your-generated-token>" -v "/path/to/your/project:/usr/src" sonarsource/sonar-scanner-cli
+
+Replace <your-generated-token> with a token you generate 
+from the SonarQube UI for authentication (Administration > Security > Users > Tokens).
+
+Step 6: Review Analysis Results
+After running the scan, refresh the SonarQube web interface to see the analysis results. 
+Navigate to your project to review any issues, vulnerabilities, or code smells detected.
+
+
+Troubleshooting
+If you encounter any issues accessing SonarQube at http://localhost:9000, 
+ensure your Docker container is running by checking docker ps. 
+Also, ensure there's no firewall or network issue blocking access to that port.
+
+Using Docker simplifies the installation and setup of SonarQube, making it accessible for projects of any size to benefit from its comprehensive code analysis capabilities.
+
+
+Project Setup
+Let's consider a Python project with the following file structure:
+
+my_python_project/
+  src/
+    app.py
+  tests/
+    test_app.py
+  sonar-project.properties
+  requirements.txt
+
+
+app.py contains the main application code.
+test_app.py contains tests for the application.
+sonar-project.properties is the configuration file for SonarQube Scanner.
+requirements.txt lists the project dependencies.
+
+
+Step 1: Writing the Code
+app.py:
+
+# Introducing a code smell: unnecessary complexity and hardcoded password
+def complex_function(a, b):
+    password = "admin"  # Hardcoded password
+    if a > b:
+        return a
+    elif a < b:
+        return b
+    else:
+        for i in range(5):
+            print(i)
+        return a
+
+# Duplicate code - a code smell
+def duplicate_code():
+    for i in range(5):
+        print(i)
+
+def another_duplicate():
+    for i in range(5):
+        print(i)
+
+requirements.txt just to ensure we have a file, it could be empty for this example.
+
+Step 2: Setting Up sonar-project.properties
+Create a sonar-project.properties file in your project root with the following content:
+
+sonar.projectKey=my_python_project
+sonar.projectName=My Python Project
+sonar.projectVersion=1.0
+
+sonar.sources=src
+sonar.exclusions=**/__pycache__/**
+sonar.language=py
+sonar.sourceEncoding=UTF-8
+
+Step 3: Running SonarQube Scanner
+Assuming you have SonarQube server running and accessible, and SonarQube Scanner installed, navigate to your project directory in the terminal and execute:
+
+sonar-scanner
+This command analyzes your project and sends the results to SonarQube.
+
+Step 4: Reviewing Results on SonarQube Dashboard
+After the scan completes, access your SonarQube dashboard, 
+usually through a web interface at http://localhost:9000 
+(or wherever your SonarQube server is hosted). You'll see your project listed there. Click on it to review the issues:
+
+Bugs: Look for any bugs identified in your code.
+Vulnerabilities: 
+Check for security vulnerabilities, like the hardcoded password in complex_function.
+
+Code Smells: Review suggestions to improve code quality, 
+like the duplicate code in duplicate_code and another_duplicate.
+
+Coverage and Duplications: See how much of your code is covered by tests and identify duplicated code blocks.
+
+
+From this analysis, you'd learn:
+The importance of avoiding hardcoded sensitive information.
+The need to refactor complex or duplicated code for better maintainability.
+How automated tools like SonarQube can significantly improve code 
+quality by identifying issues early in the development cycle.
+
+Integrating SonarQube into your CI/CD pipeline ensures these checks are 
+performed automatically, maintaining high code quality standards 
+throughout the project lifecycle.
+
+Clean Up:
+
+To stop and remove the SonarQube Docker container you've started, you can follow these two steps:
+
+Step 1: Stop the Container
+First, stop the running container. 
+You'll need the name or ID of the container, 
+which you've named sonarqube in the previous command. 
+Use the following command to stop it:
+
+docker stop sonarqube
+This command tells Docker to stop the container named sonarqube. 
+Stopping a container will halt its execution, but the container itself, 
+along with its data, will still exist on your system.
+
+Step 2: Remove the Container
+After stopping the container, you might want to remove it to clean up your system.
+ Use the following command to remove the container:
+
+
+docker rm sonarqube
+This command removes the stopped container named sonarqube from your system, 
+freeing up resources. Note that this action is irreversible, 
+and any data stored exclusively within the container 
+will be lost unless it was stored in a volume or persisted outside the container.
+
+Additional: Removing the SonarQube Image (Optional)
+If you decide that you no longer need the SonarQube Docker image on your system, 
+you can remove it as well. First, find the image ID with:
+
+docker images
+Look for the sonarqube image in the list, and note its IMAGE ID. 
+Then, use the following command to remove the image:
+
+docker rmi <image-id>
+
+Replace <image-id> with the actual image ID you noted. 
+This step is optional and usually done to free up disk space if you're 
+sure you won't need the SonarQube image anymore.
