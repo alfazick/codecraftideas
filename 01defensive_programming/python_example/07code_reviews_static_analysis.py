@@ -1,3 +1,8 @@
+# Code Reviews and Static Analysis: 
+# Regularly review code manually and use static analysis tools to detect 
+# potential security vulnerabilities, bugs, and bad practices early in the development cycle.
+
+
 
 # Easy: flake8 check your code against PEP 8 and programming errors
 
