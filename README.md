@@ -9,3 +9,6 @@ Different ideas for real programming
 04 Assertions + Systems programming examples: Done in Python
 05 Principle Of Least Privelege. Need more examples and in-depth treatise
 06 Immutable Data
+07 Code Reviews and Static Analysis
+08 Input Sanitization
+09 Timeouts and Resource Limits
