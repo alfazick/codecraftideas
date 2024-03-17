@@ -12,3 +12,4 @@ Different ideas for real programming
 07 Code Reviews and Static Analysis
 08 Input Sanitization
 09 Timeouts and Resource Limits
+10 Logging

@@ -1,0 +1,5 @@
+2024-03-17 05:32:52,826 - __main__ - DEBUG - This message should go the debug log file
+2024-03-17 05:32:52,826 - __main__ - ERROR - This should appear in the console
+2024-03-17 05:37:38,377 - __main__ - DEBUG - This message should go the debug log file
+2024-03-17 05:37:38,377 - __main__ - ERROR - This should appear in the console
+2024-03-17 05:37:38,377 - __main__ - INFO - This is a test message for the custom handler
